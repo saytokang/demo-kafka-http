@@ -1,0 +1,5 @@
+POST http://localhost:8080/send
+Content-Type: text/plain
+
+무궁화 꽃이 피었습니다.
+###
