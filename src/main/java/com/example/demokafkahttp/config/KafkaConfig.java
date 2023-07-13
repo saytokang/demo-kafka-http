@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -15,6 +14,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.KafkaAdmin.NewTopics;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
@@ -23,18 +23,13 @@ import org.springframework.messaging.handler.annotation.SendTo;
 @Configuration
 public class KafkaConfig {
 
-	public static final String REQ_TOPIC = "reqTopic";
+	public static final String REQ_TOPIC = "srcTopic";
 
-	public static final String RES_TOPIC = "resTopic";
-
-	@Bean
-	public NewTopic reqTopic() {
-		return TopicBuilder.name(REQ_TOPIC).build();
-	}
+	public static final String RES_TOPIC = "dstTopic";
 
 	@Bean
-	public NewTopic resTopic() {
-		return TopicBuilder.name(RES_TOPIC).build();
+	public NewTopics topics() {
+		return new NewTopics(TopicBuilder.name(REQ_TOPIC).build(), TopicBuilder.name(RES_TOPIC).build());
 	}
 
 	@Bean

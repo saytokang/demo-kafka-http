@@ -3,3 +3,9 @@ Content-Type: text/plain
 
 무궁화 꽃이 피었습니다.
 ###
+
+POST http://localhost:8080/sendAsync
+Content-Type: text/plain
+
+무궁화 꽃이 피었습니다.
+###

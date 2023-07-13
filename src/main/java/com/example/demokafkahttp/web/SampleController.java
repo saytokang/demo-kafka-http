@@ -48,4 +48,19 @@ public class SampleController {
 		}
 	}
 
+	@PostMapping("/sendAsync")
+	public ResponseEntity<?> sendAsync(@RequestBody String body) {
+		var payload = String.format("%s, send time: %s", body, LocalDateTime.now());
+		var pRecord = new ProducerRecord<String, String>(KafkaConfig.REQ_TOPIC, "k1", payload);
+		pRecord.headers().add(KafkaHeaders.REPLY_TOPIC, KafkaConfig.RES_TOPIC.getBytes(StandardCharsets.UTF_8));
+		replyingKafkaTemplate.sendAndReceive(pRecord).whenComplete((rs, ex) -> {
+			if (ex != null) {
+				log.error("{}", ex);
+				return;
+			}
+			log.info("rs offset: {}", rs.offset());
+		});
+		return ResponseEntity.ok().build();
+	}
+
 }
